@@ -6,8 +6,8 @@
 // @grant       none
 // @version     1.1
 // @author      AUTOMATIC
-// @require     https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.1/dist/tf.js
-// @require     https://github.com/Huhni/4chan-captcha-solver/raw/main/model.js
+// @require     https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.1/dist/tf.js#sha256=a3bfcba7a44c66c23459a5c90620fac58ee512f4e496cef442059335a1147443
+// @require     https://github.com/Huhni/4chan-captcha-solver/raw/main/model.js#sha256=bc28aab77b077565d879e8cc59d502a3f2a20347c8751191f6fbdf7ba0754c3f
 // @description modified: model in separate file, fix some linter warnings
 // ==/UserScript==
 
