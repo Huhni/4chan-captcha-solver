@@ -1,19 +1,26 @@
-# 4chan-captcha-solver
-4chan captcha solver userscript
+### Just messing around with the script, despite having no tensorflow experience. What could go wrong?
 
-Automatically fills in the captcha when the captcha loads. If you get a slider captcha, the slider will be moved into position automatically. If the automatic slider detection is incorrect, you can move it yourself and press the "Solve" button to redo the solution with the new position.
+#### Ideas or whatever:
+- Easiest way to debloat the huge script is to put **weights64** in a separate file and `@require` it.
 
-No error handling in place - if solving fails, you can find the reason in js console.
+- [Saving and loading models](https://www.tensorflow.org/js/guide/save_load) aka remove the whole iohander and replace:\
+  `await tf.loadLayersModel(iohander);`\
+  with\
+  `await tf.loadLayersModel('https://github.com/Huhni/4chan-captcha-solver/raw/main/model.json');`
+  
+  This should then load the `./weights.bin` and the whole base64 decoding and **modelJSON** bloat would be gone
+  
+  --> **Problem:** CORS exists.
 
-I can't upload it to any userscript js site because of size. Most of the size is model weights.
-
-#### 24.07.2022
-- Built a new model trained on 4chan's new captcha with 5-6 characters, specks, lines, and more extra garbage scattered everywhere.
-- Disabled some of tooltip debug functionality I imagine no one used.
-- Changed the algorithm to not produce empty result wjhen the length of captcha output is not what we expected.
-- Tested on Firefox with Violentmonkey.
-
-#### 11.07.2021
-- Built a new model from scratch, without using a pretrained one, on 50k synthetic samples (as opposed to previous one trained on 400 images + their augmentations).
-
-![screenshot](./screenshot.png)
+- Loading the raw binary weights as a resource\
+  `// @resource    weights https://github.com/Huhni/4chan-captcha-solver/raw/main/weights.bin`\
+  `var binary_string = window.atob(base64);`  --> `var binary_string = GM_getResourceText('weights')`
+  
+  --> *Error: Based on the provided shape, [1200,800], the tensor should have 960000 values but has 0*\
+  Maybe **GM_getResourceText** can't handle binary data? idk. Perhaps **GM_xmlhttpRequest** with `responseType = 'arraybuffer'` works.
+ 
+ 
+ ### Other stuff
+ - Switch to [tfjs-core](https://www.jsdelivr.com/package/npm/@tensorflow/tfjs-core) and use [WASM as backend](https://www.jsdelivr.com/package/npm/@tensorflow/tfjs-backend-wasm)
+ - use minified scripts, for some placebo speed improvement
+ - Using [subresource Integrity](https://www.tampermonkey.net/documentation.php#Subresource_Integrity) is also always a good idea
